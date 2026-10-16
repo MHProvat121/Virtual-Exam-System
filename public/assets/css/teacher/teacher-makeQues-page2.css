@@ -1,0 +1,378 @@
+
+/* ==========================================================================
+   TABLE SECTION
+   ========================================================================== */
+
+ 
+
+
+.table-section {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, .08);
+    overflow: hidden;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right:10px;
+    margin-bottom: 50px;
+}
+
+.table-header {
+    padding: 22px;
+    border-bottom: 1px solid #eee;
+    background-color: #c0d4ed;
+}
+
+.table-header h2 {
+    color: #1d2b53;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #fafafa;
+    text-align: left;
+    padding: 18px;
+    color: #444;
+}
+
+td {
+    padding: 18px;
+    border-top: 1px solid #eee;
+}
+
+tbody tr:hover {
+    background: #fafcff;
+}
+
+.start-btn {
+    border: none;
+    background: #1565c0;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.exam-button{
+    padding: 10px 20px;
+    font-size: 15px;
+}
+
+.create-exam{
+    padding: 15px 70px;
+}
+
+.start-btn:hover {
+    background: #0d47a1;
+}
+
+@media(max-width:768px) {
+    .content-wrapper {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .dashboard {
+        padding: 20px;
+    }
+
+    table {
+        min-width: 700px;
+    }
+
+    .table-section {
+        overflow: auto;
+    }
+}
+
+/*====================================================
+    Form Container 
+====================================================*/
+/* Container Layout */
+.form-container {
+    max-width: 750px;
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 35px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+}
+
+.form-header {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f4f7fc;
+}
+
+.form-header h2 {
+    color: #0b1e36;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.form-header p {
+    color: #4b5563;
+    font-size: 14px;
+}
+
+/* Form Structural Rows & Groups */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-row .col {
+    flex: 1;
+}
+
+/* Labels and Inputs */
+label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.required {
+    color: #e11d48;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #111827;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus,
+select:focus {
+    border-color: #0266cc;
+    box-shadow: 0 0 0 3px rgba(2, 102, 204, 0.15);
+}
+
+/* Calendar & Time Icon Customization */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: invert(0.3);
+}
+
+/* Submit Button */
+.form-actions {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.btn-primary {
+    background-color: #0266cc;
+    color: #ffffff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    background-color: #0255a8;
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* Responsive adjustments for mobile screens */
+@media (max-width: 640px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .form-container {
+        padding: 20px;
+    }
+}
+
+/*============================
+QUESTION BUILDER LAYOUT
+========================*/
+/* Question Builder Layout */
+.question-builder-section {
+        padding: 35px;
+        display: grid;
+        gap: 0px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.question-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.question-card-header {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    background: #f8fafc;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.form-group-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-group-inline label {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.form-group-inline select,
+.form-group-inline input {
+    padding: 8px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+}
+
+.question-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.question-body textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+/* MCQ Options Matrix */
+.options-container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.option-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.option-row input[type="text"] {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+}
+
+.btn-secondary {
+    background: #475569;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+    background: #334155;
+}
+
+.btn-save {
+    background: #16a34a;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    align-self: flex-start;
+    margin-top: 10px;
+}
+
+.btn-save:hover {
+    background: #15803d;
+}
+
+.btn-delete {
+    background: #dc2626;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background: #b91c1c;
+}
+
+.btn-edit {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.btn-edit:hover {
+    background-color: #e5e7eb;
+}
+

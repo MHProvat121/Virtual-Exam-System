@@ -1,0 +1,728 @@
+/* ========================================================
+   ADMIN STUDENT ENROLLMENT & WITHDRAWAL MANAGEMENT STYLESHEET
+   File: admin-manageEnroll-page.css
+   ======================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+}
+
+.dashboard {
+    padding: 24px 30px;
+    background-color: #f8fafc;
+    min-height: calc(100vh - 70px);
+}
+
+/* Page Header */
+.page-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.header-left-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.header-left-title h1 {
+    font-size: 1.5rem;
+    color: #0f172a;
+    margin: 0;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-back-dashboard {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    background-color: #475569;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-back-dashboard:hover {
+    background-color: #334155;
+    transform: translateY(-1px);
+}
+
+.admin-badge-info {
+    background: #ffffff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.85rem;
+    color: #334155;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Section Navigation Switcher Tabs */
+.section-switch-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 22px;
+    background: #ffffff;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    width: fit-content;
+    flex-wrap: wrap;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.section-switch-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #64748b;
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.section-switch-btn:hover {
+    color: #0f172a;
+    background: #f1f5f9;
+}
+
+.section-switch-btn.active {
+    background: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.section-switch-btn.active.withdraw-tab {
+    background: #dc2626;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+}
+
+.badge-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.section-switch-btn.active .badge-count {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+}
+
+.badge-count.badge-danger {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* Alert Boxes */
+.alert-box {
+    padding: 13px 18px;
+    margin-bottom: 22px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid transparent;
+}
+
+.alert-box i {
+    font-size: 1.1rem;
+}
+
+.alert-success {
+    background-color: #dcfce7;
+    color: #15803d;
+    border-color: #bbf7d0;
+}
+
+.alert-warning {
+    background-color: #fef3c7;
+    color: #b45309;
+    border-color: #fde68a;
+}
+
+.alert-error,
+.alert-danger {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border-color: #fecaca;
+}
+
+/* Stats Overview Cards */
+.stats-grid-enrollment {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.stat-card-item {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 18px 20px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.stat-card-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.stat-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.icon-blue-bg {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.icon-amber-bg {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.icon-green-bg {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+.icon-red-bg {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.icon-purple-bg {
+    background: #faf5ff;
+    color: #9333ea;
+}
+
+.stat-details .stat-number {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+.stat-details .stat-label {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+/* Controls Card (Tabs & Search) */
+.controls-card {
+    background: #ffffff;
+    padding: 16px 20px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.filter-tabs-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.tab-link {
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    transition: all 0.2s;
+}
+
+.tab-link:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.tab-link.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+}
+
+.tab-link.active.withdraw-active {
+    background: #dc2626;
+    color: #ffffff;
+    border-color: #dc2626;
+}
+
+.search-form {
+    display: flex;
+    gap: 8px;
+    flex-grow: 1;
+    max-width: 420px;
+}
+
+.search-input-field {
+    flex-grow: 1;
+    padding: 8px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input-field:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.btn-search-submit {
+    padding: 8px 16px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-search-submit:hover {
+    background: #1d4ed8;
+}
+
+.btn-search-submit.withdraw-search {
+    background: #dc2626;
+}
+
+.btn-search-submit.withdraw-search:hover {
+    background: #b91c1c;
+}
+
+
+
+/* Table Card & Section */
+.table-section {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    margin-bottom: 25px;
+    /* REMOVED height: min-content; - Let the section adapt cleanly */
+}
+
+.table-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.table-section-header h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* UPDATED: Handles both horizontal and vertical scrolling */
+.table-responsive {
+    width: 100%;
+    max-height: 700px;
+    /* Sized perfectly to display ~10 rows plus header */
+    overflow-y: auto;
+    /* Enables vertical scrolling for long datasets */
+    overflow-x: auto;
+    /* Keeps your horizontal responsiveness working */
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    /* Required for sticky headers to display borders properly */
+    border-spacing: 0;
+    /* Restores collapse behavior for cells */
+    text-align: left;
+}
+
+/* UPDATED: Keeps table headers fixed at the top while scrolling vertically */
+table th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #f8fafc;
+    /* Prevents rows from rendering behind header text */
+    color: #475569;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 12px 14px;
+    border-bottom: 2px solid #e2e8f0;
+    white-space: nowrap;
+}
+
+table td {
+    padding: 14px 14px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.88rem;
+    color: #334155;
+    vertical-align: middle;
+}
+
+table tr:hover td {
+    background-color: #f8fafc;
+}
+
+
+
+/* Name Cell & Avatar */
+.name-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.avatar-thumb {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e2e8f0;
+    background-color: #f1f5f9;
+    flex-shrink: 0;
+}
+
+.avatar-icon-placeholder {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* Badges */
+.badge-course {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid #dbeafe;
+}
+
+.badge-course-code {
+    display: inline-block;
+    background-color: #f1f5f9;
+    color: #334155;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: monospace;
+    font-weight: 600;
+    border: 1px solid #e2e8f0;
+    margin: 2px 2px 2px 0;
+}
+
+.badge-method {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.trx-code {
+    background: #f1f5f9;
+    color: #0f172a;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.82rem;
+    border: 1px solid #e2e8f0;
+    display: inline-block;
+    word-break: break-all;
+    max-width: 180px;
+}
+
+/* Status Badges */
+.status-badge-custom {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #d97706;
+    border: 1px solid #fde68a;
+}
+
+.status-enrolled,
+.status-withdrawn {
+    background: #d1fae5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+}
+
+.status-cancelled,
+.status-rejected {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+/* Reason Box / Truncation */
+.reason-text {
+    max-width: 220px;
+    font-size: 0.82rem;
+    color: #475569;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.reason-truncated {
+    /* 1. Standard Modern Spec (Clears warnings) */
+    line-clamp: 2;
+
+    /* 2. Legacy Vendor Prefixes (Maintains real-world browser rendering) */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    /* 3. Safety Fallbacks */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Action Buttons */
+.btn-action-small {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: opacity 0.2s, transform 0.1s;
+    white-space: nowrap;
+}
+
+.btn-action-small:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.btn-action-small:disabled,
+.btn-action-small.disabled {
+    opacity: 0.45 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.btn-approve-action {
+    background: #059669;
+    color: #ffffff;
+}
+
+.btn-approve-action:hover {
+    background: #047857;
+}
+
+.btn-cancel-action {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+.btn-cancel-action:hover {
+    background: #b91c1c;
+}
+
+/* Modals */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(3px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 15px;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.cancel-modal-container {
+    background: #ffffff;
+    padding: 26px 28px;
+    border-radius: 12px;
+    width: 480px;
+    max-width: 95%;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.cancel-modal-header {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #dc2626;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-modal-cancel {
+    padding: 9px 18px;
+    background: #e2e8f0;
+    color: #475569;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.15s ease;
+}
+
+.btn-modal-cancel:hover {
+    background: #cbd5e1;
+    color: #1e293b;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 16px;
+    }
+
+    .page-header-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .controls-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-form {
+        max-width: 100%;
+    }
+
+    .section-switch-nav {
+        width: 100%;
+    }
+
+    .section-switch-btn {
+        flex: 1;
+        justify-content: center;
+    }
+}

@@ -1,0 +1,366 @@
+.batch-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-action {
+    padding: 8px 14px;
+    font-size: 13px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-enroll {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.btn-enroll:hover {
+    background-color: #1d4ed8;
+}
+
+/* Withdraw Action Button */
+.btn-withdraw {
+    background-color: #dc2626;
+    color: #ffffff;
+}
+
+.btn-withdraw:hover {
+    background-color: #b91c1c;
+}
+
+.btn-view-course {
+    background-color: #0266cc;
+    color: #ffffff;
+}
+
+.btn-view-course:hover {
+    background-color: #024da1;
+}
+
+/* Active Enrolled & Withdrawn Action Buttons */
+.btn-action.status-enrolled,
+button.btn-action.status-enrolled {
+    background-color: #10b981;
+    color: #ffffff;
+    cursor: pointer !important;
+    border: none;
+    opacity: 1 !important;
+}
+
+.btn-action.status-enrolled:hover,
+button.btn-action.status-enrolled:hover {
+    background-color: #059669;
+}
+
+.btn-action.status-withdrawn,
+button.btn-action.status-withdrawn {
+    background-color: #ef4444;
+    color: #ffffff;
+    cursor: pointer !important;
+    border: none;
+    opacity: 1 !important;
+}
+
+.btn-action.status-withdrawn:hover,
+button.btn-action.status-withdrawn:hover {
+    background-color: #dc2626;
+}
+
+.btn-action.btn-withdraw.btn-all-withdrawn,
+button.btn-action.btn-withdraw.btn-all-withdrawn {
+    background-color: #f87171;
+    color: #ffffff;
+    cursor: pointer !important;
+    border: none;
+    opacity: 1 !important;
+}
+
+.btn-action.btn-withdraw.btn-all-withdrawn:hover,
+button.btn-action.btn-withdraw.btn-all-withdrawn:hover {
+    background-color: #ef4444;
+}
+
+/* Disabled Buttons */
+.btn-action.btn-view-course.disabled,
+button.btn-view-course:disabled {
+    background-color: #cbd5e1 !important;
+    color: #64748b !important;
+    cursor: not-allowed !important;
+    opacity: 0.75;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    display: inline-block;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.status-unenrolled {
+    background-color: #e2e8f0;
+    color: #475569;
+}
+
+.status-none {
+    background-color: #e2e8f0;
+    color: #475569;
+}
+
+.status-pending {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.status-enrolled {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+.status-cancelled {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.status-withdrawn {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.status-rejected {
+    background-color: #f1f5f9;
+    color: #b91c1c;
+}
+
+/* Course Checkbox Styling */
+.course-checkbox {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    accent-color: #0f172a;
+    vertical-align: middle;
+    transition: all 0.15s ease-in-out;
+}
+
+.course-withdraw-check {
+    accent-color: #dc2626;
+}
+
+.course-checkbox:disabled {
+    cursor: not-allowed;
+    opacity: 0.42;
+}
+
+.course-checkbox:disabled:checked {
+    cursor: default;
+    opacity: 0.95;
+    accent-color: #0f172a;
+    filter: contrast(140%);
+}
+
+.course-withdraw-check:disabled:checked {
+    accent-color: #dc2626;
+}
+
+/* Searchbar Styling */
+.search-bar-container {
+    margin-bottom: 25px;
+    background: #ffffff;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-bar-container input {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-bar-container input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Cancellation Banner */
+.cancellation-notice {
+    background-color: #fef2f2;
+    border-bottom: 1px solid #fecaca;
+    padding: 14px 20px;
+    color: #991b1b;
+    font-size: 13.5px;
+}
+
+/* Confirmation Modal Styles */
+.batch-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+}
+
+.batch-modal-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 28px 30px;
+    width: 90%;
+    max-width: 440px;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    animation: batchModalFadeIn 0.2s ease-out;
+}
+
+@keyframes batchModalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.batch-modal-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 16px auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.batch-modal-icon.withdraw {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.batch-modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.batch-modal-prompt {
+    font-size: 14.5px;
+    color: #475569;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+.batch-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.batch-modal-btn {
+    flex: 1;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s ease;
+}
+
+.batch-modal-cancel {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.batch-modal-cancel:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+.batch-modal-confirm {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.batch-modal-confirm:hover {
+    background: #1d4ed8;
+}
+
+.batch-modal-confirm.withdraw {
+    background: #dc2626;
+}
+
+.batch-modal-confirm.withdraw:hover {
+    background: #b91c1c;
+}
+
+/* Table Header Master Checkbox Styling */
+.th-checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: inherit;
+    margin: 0;
+    padding: 3px 6px;
+    border-radius: 6px;
+    transition: background-color 0.15s ease;
+}
+
+.th-checkbox-label:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.th-select-all {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    margin: 0;
+    vertical-align: middle;
+}
+
+.th-select-all-enroll {
+    accent-color: #0266cc;
+}
+
+.th-select-all-withdraw {
+    accent-color: #dc2626;
+}
+
+.th-select-all:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}

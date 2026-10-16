@@ -1,0 +1,947 @@
+/* ==========================================================================
+   ADMIN RESULT PAGE STYLES (admin-result-page.css)
+   Full standalone styles for admin-result-page.php:
+   1. Dashboard & Header Layout
+   2. Summary KPI Metric Cards
+   3. Controls-Card (Status Tabs + Live Search)
+   4. Pin & Archive Controls
+   5. Batch Cards & Result Tables
+   6. Action Buttons & Feedback Modal Triggers
+   7. Evaluation Status Badges
+   8. Letter Grade Pill Badges
+   9. Teacher Feedback / Evaluation Modal
+   10. Responsive Layout
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. DASHBOARD & GENERAL LAYOUT
+   -------------------------------------------------------------------------- */
+.main-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+}
+
+.dashboard {
+    padding: 35px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 5px;
+}
+
+.dashboard-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1d2b53;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dashboard-header p {
+    color: #64748b;
+    font-size: 14px;
+    margin: 4px 0 0 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Alert Boxes */
+.alert-box {
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-success {
+    background-color: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+.alert-info {
+    background-color: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+}
+
+/* --------------------------------------------------------------------------
+   2. SUMMARY STATS CARDS (KPIS)
+   -------------------------------------------------------------------------- */
+.stats-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 15px;
+    margin-bottom: 5px;
+}
+
+.stat-metric-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.stat-metric-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.stat-icon-scheduled {
+    background: #eff6ff !important;
+    color: #0266cc !important;
+}
+
+.stat-icon-submitted {
+    background: #f0fdf4 !important;
+    color: #16a34a !important;
+}
+
+.stat-icon-graded {
+    background: #fefce8 !important;
+    color: #ca8a04 !important;
+}
+
+.stat-icon-average {
+    background: #fdf2f8 !important;
+    color: #db2777 !important;
+}
+
+.stat-metric-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-metric-info h4 {
+    margin: 0;
+    font-size: 0.78rem;
+    color: #64748b;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+}
+
+.stat-metric-info .metric-value {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-top: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   3. CONTROLS ROW (STATUS TABS + SEARCH) - PROTOTYPED FROM admin-manageEnroll-page
+   -------------------------------------------------------------------------- */
+.controls-card,
+div.controls-card {
+    background: #ffffff;
+    padding: 16px 20px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+}
+
+.controls-card .filter-tabs-group,
+.filter-tabs-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.controls-card .tab-link,
+.tab-link {
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.controls-card .tab-link:hover,
+.tab-link:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+    border-color: #94a3b8;
+}
+
+.controls-card .tab-link.active,
+.tab-link.active {
+    background: #0266cc;
+    color: #ffffff;
+    border-color: #0266cc;
+    box-shadow: 0 2px 4px rgba(2, 102, 204, 0.25);
+}
+
+.controls-card .tab-link.active i,
+.tab-link.active i {
+    color: #ffffff !important;
+}
+
+.controls-card .search-form,
+.search-form {
+    display: flex;
+    gap: 8px;
+    flex-grow: 1;
+    max-width: 480px;
+    margin: 0;
+}
+
+.controls-card .search-input-field,
+.search-input-field {
+    flex-grow: 1;
+    padding: 8px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    outline: none;
+    background: #ffffff;
+    color: #1e293b;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.controls-card .search-input-field:focus,
+.search-input-field:focus {
+    border-color: #0266cc;
+    box-shadow: 0 0 0 3px rgba(2, 102, 204, 0.15);
+}
+
+.controls-card .btn-search-submit,
+.btn-search-submit {
+    padding: 8px 16px;
+    background: #0266cc;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.controls-card .btn-search-submit:hover,
+.btn-search-submit:hover {
+    background: #0252a3;
+}
+
+#searchNoResultsMessage {
+    display: none;
+    text-align: center;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 20px;
+}
+
+#searchNoResultsMessage p {
+    color: #64748b;
+    font-size: 15px;
+    margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   4. ARCHIVE & PIN BUTTONS
+   -------------------------------------------------------------------------- */
+.btn-archive-page {
+    background-color: #475569;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 9px 18px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-archive-page:hover {
+    background-color: #334155;
+    color: #ffffff;
+}
+
+.badge-count {
+    background: #0266cc;
+    color: #ffffff;
+    padding: 2px 7px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.btn-pin {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+
+.btn-pin:hover {
+    border-color: #0266cc;
+    color: #0266cc;
+}
+
+.btn-pin.pinned {
+    background: #0266cc;
+    color: #ffffff;
+    border-color: #0266cc;
+}
+
+.btn-pin.pinned:hover {
+    background: #0252a3;
+}
+
+.badge-pinned {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #eff6ff;
+    color: #0266cc;
+    border: 1px solid #bfdbfe;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.btn-archive-table {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+
+.btn-archive-table:hover {
+    background: #fef3c7;
+    border-color: #d97706;
+    color: #b45309;
+}
+
+.btn-restore-table {
+    background: #059669;
+    color: #ffffff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-restore-table:hover {
+    background: #047857;
+}
+
+/* --------------------------------------------------------------------------
+   5. BATCH CARDS & TABLES
+   -------------------------------------------------------------------------- */
+.table-section-container {
+    width: 100%;
+}
+
+.batch-card {
+    background: #ffffff;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.batch-card.pinned {
+    border-color: #93c5fd;
+    box-shadow: 0 4px 14px rgba(2, 102, 204, 0.08);
+}
+
+.batch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 16px 20px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.batch-header.pinned {
+    background: #eff6ff;
+}
+
+.batch-title-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.batch-header h2 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 1.15rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.batch-meta-info {
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.batch-meta-info span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.batch-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.empty-batch-card {
+    background: #ffffff;
+    border-radius: 10px;
+    text-align: center;
+    color: #64748b;
+    padding: 40px 20px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.empty-batch-card h3 {
+    margin-top: 0;
+    color: #1e293b;
+    font-size: 1.1rem;
+}
+
+.empty-batch-card p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table,
+table.exam-table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+th,
+table.exam-table th {
+    text-align: left;
+    padding: 14px 16px;
+    color: #475569;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 2px solid #e2e8f0;
+    background-color: #f8fafc;
+    letter-spacing: 0.3px;
+}
+
+td,
+table.exam-table td {
+    padding: 14px 16px;
+    border-top: 1px solid #f1f5f9;
+    color: #1e293b;
+    font-size: 0.88rem;
+    vertical-align: middle;
+}
+
+tbody tr:hover {
+    background: #fafcff;
+}
+
+.status-cell {
+    white-space: nowrap;
+}
+
+.action-cell {
+    white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   6. ACTION BUTTONS
+   -------------------------------------------------------------------------- */
+.action-btn-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn {
+    border: none;
+    color: #ffffff !important;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn-view-result {
+    background-color: #0266cc !important;
+    color: #ffffff !important;
+}
+
+.btn-view-result:hover {
+    background-color: #0252a3 !important;
+}
+
+.btn-feedback-quick {
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    color: #334155 !important;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-feedback-quick:hover {
+    background-color: #f1f5f9;
+    color: #0266cc !important;
+    border-color: #93c5fd;
+}
+
+.btn-not-started {
+    background-color: #94a3b8 !important;
+    color: #ffffff !important;
+    cursor: not-allowed !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. EVALUATION STATUS BADGES
+   -------------------------------------------------------------------------- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.badge-graded {
+    background-color: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+}
+
+.badge-review {
+    background-color: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+.badge-submitted {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+
+.badge-absent {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.badge-not-taken {
+    background-color: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+}
+
+.badge-type {
+    background-color: #ede9fe;
+    color: #6d28d9;
+}
+
+/* --------------------------------------------------------------------------
+   8. GRADE PILL STYLING
+   -------------------------------------------------------------------------- */
+.grade-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.3px;
+}
+
+.grade-a-plus {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #86efac;
+}
+
+.grade-a {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+}
+
+.grade-a-minus {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.grade-b-plus {
+    background: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+
+.grade-b {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+
+.grade-b-minus {
+    background: #f8fafc;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+}
+
+.grade-c-plus {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.grade-c {
+    background: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fef08a;
+}
+
+.grade-d {
+    background: #ffedd5;
+    color: #c2410c;
+    border: 1px solid #fed7aa;
+}
+
+.grade-f {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+.grade-review {
+    background: #fef3c7;
+    color: #b45309;
+    font-size: 0.76rem;
+    border: 1px solid #fde68a;
+}
+
+.grade-submitted {
+    background: #e0e7ff;
+    color: #4338ca;
+    font-size: 0.76rem;
+    border: 1px solid #c7d2fe;
+}
+
+.grade-na {
+    background: #f1f5f9;
+    color: #94a3b8;
+    border: 1px solid #e2e8f0;
+}
+
+/* --------------------------------------------------------------------------
+   9. MODAL FOR FEEDBACK / EVALUATION SUMMARY
+   -------------------------------------------------------------------------- */
+.result-modal-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.result-modal-content {
+    background: #ffffff;
+    border-radius: 12px;
+    max-width: 550px;
+    width: 100%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    padding: 16px 20px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 1.05rem;
+    color: #1e293b;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: #94a3b8;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.modal-close-btn:hover {
+    color: #475569;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-kpi-grid {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    background: #f8fafc;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.modal-label {
+    color: #64748b;
+    display: block;
+    font-size: 0.8rem;
+}
+
+.modal-value-marks {
+    color: #059669;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.modal-value-grade {
+    color: #1e293b;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.modal-value-evaluator {
+    color: #0266cc;
+    font-weight: 600;
+}
+
+.modal-section-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.modal-feedback-box {
+    margin-top: 6px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 0.9rem;
+    color: #334155;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    min-height: 80px;
+}
+
+.modal-footer {
+    padding: 12px 20px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    text-align: right;
+}
+
+.btn-modal-close {
+    background-color: #64748b !important;
+    color: #ffffff !important;
+}
+
+.btn-modal-close:hover {
+    background-color: #475569 !important;
+}
+
+/* --------------------------------------------------------------------------
+   10. RESPONSIVE DESIGN
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 20px;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .controls-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-form {
+        max-width: 100%;
+    }
+
+    .batch-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    table,
+    table.exam-table {
+        min-width: 800px;
+    }
+}

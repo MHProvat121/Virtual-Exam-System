@@ -1,0 +1,317 @@
+/* ==========================================================================
+   DASHBOARD CONTENT STYLES
+   ========================================================================== */
+.dashboard {
+    padding: 35px;
+    width: 100%;
+}
+
+.dashboard h1 {
+    margin-bottom: 25px;
+    color: #1d2b53;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 22px;
+    margin-bottom: 35px;
+}
+
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, .08);
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+}
+
+.blue {
+    background: #eaf2ff;
+    color: #2979ff;
+}
+
+.primary {
+    background: #eef4ff;
+    color: #2962ff;
+}
+
+.green {
+    background: #e9f9ef;
+    color: #15a55c;
+}
+
+.orange {
+    background: #fff5e7;
+    color: #f39c12;
+}
+
+.success {
+    background: #e8fff3;
+    color: #11a567;
+}
+
+.danger {
+    background: #ffecec;
+    color: #e53935;
+}
+
+.info p {
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.info h2 {
+    color: #222;
+    font-size: 26px;
+}
+
+/*--- Exam Table Section --------*/
+.table-section {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, .08);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.table-header {
+    padding: 22px;
+    border-bottom: 1px solid #eee;
+}
+
+.table-header h2 {
+    color: #1d2b53;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #fafafa;
+    text-align: left;
+    padding: 18px;
+    color: #444;
+}
+
+td {
+    padding: 18px;
+    border-top: 1px solid #eee;
+}
+
+tbody tr:hover {
+    background: #fafcff;
+}
+
+.start-btn {
+    border: none;
+    background: #1565c0;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .3s;
+      
+}
+
+.start-btn:hover {
+    background: #0d47a1;
+}
+
+
+/* ======================================================
+Bottom Buttons to view Lists
+================================================================*/
+.btn-flex {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+    width: 100%;
+}
+
+/* Equal width distribution for each button wrapper */
+.btn-flex a {
+    flex: 1 1 220px;
+    /* Expands equally, minimum width of 220px before wrapping */
+    text-decoration: none;
+}
+
+/* Base Action Button Styles */
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.25s ease-in-out;
+}
+
+.action-btn i {
+    font-size: 18px;
+}
+
+/* Hover Lift Effect */
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.15);
+    color: #ffffff;
+}
+
+.action-btn:active {
+    transform: translateY(0);
+}
+
+/* --------------------------------------------------
+   Distinct Color Schemes
+   -------------------------------------------------- */
+
+/* 1. View Exam List (Royal Blue) */
+.btn-exam-list {
+    background-color: #2563eb;
+}
+
+.btn-exam-list:hover {
+    background-color: #1d4ed8;
+}
+
+/* 2. View Course Syllabus List (Purple / Violet) */
+.btn-syllabus-list {
+    background-color: #7c3aed;
+}
+
+.btn-syllabus-list:hover {
+    background-color: #6d28d9;
+}
+
+/* 3. View Results List (Emerald Green) */
+.btn-results-list {
+    background-color: #059669;
+}
+
+.btn-results-list:hover {
+    background-color: #047857;
+}
+
+/* Responsive adjustment for small screens */
+@media (max-width: 600px) {
+    .btn-flex {
+        flex-direction: column;
+    }
+
+    .btn-flex a {
+        width: 100%;
+    }
+}
+ 
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 20px;
+    }
+
+    table {
+        min-width: 700px;
+    }
+
+    .table-section {
+        overflow-x: auto;
+    }
+}
+
+/* Table Responsive Container */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Button style matching view-exam */
+.start-btn {
+    background-color: #3b82f6;
+    color: #ffffff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.start-btn:hover {
+    background-color: #2563eb;
+}
+
+/* ==================================================================
+Styled Empty State for No Exams Today 
+=====================================================================*/
+.empty-state-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 45px 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    text-align: center;
+    border: 2px dashed #cbd5e1;
+    margin-top: 10px;
+}
+
+.empty-state-icon {
+    width: 70px;
+    height: 70px;
+    background-color: #eff6ff;
+    color: #3b82f6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin-bottom: 16px;
+}
+
+.empty-state-card h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.empty-state-card p {
+    font-size: 0.92rem;
+    color: #64748b;
+    max-width: 440px;
+    line-height: 1.5;
+    margin: 0;
+}

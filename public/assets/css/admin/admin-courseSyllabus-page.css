@@ -1,0 +1,592 @@
+/* ==========================================================================
+   ADMIN COURSE SYLLABUS & BATCH MANAGEMENT PAGE STYLES
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. DASHBOARD & GENERAL LAYOUT
+   -------------------------------------------------------------------------- */
+.dashboard {
+    padding: 35px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.dashboard h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1d2b53;
+    margin: 0;
+}
+
+.table-section-container {
+    width: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   FEATURE 1: SEARCH BAR
+   -------------------------------------------------------------------------- */
+.search-container {
+    margin: 0 0 10px 0;
+    display: flex;
+    gap: 12px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 650px;
+}
+
+.search-input-wrapper i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+.search-input-wrapper input {
+    width: 100%;
+    padding: 10px 14px 10px 38px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #ffffff;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input-wrapper input:focus {
+    border-color: #0266cc;
+    box-shadow: 0 0 0 3px rgba(2, 102, 204, 0.12);
+}
+
+/* --------------------------------------------------------------------------
+   FEATURE 4: ARCHIVED BATCH COURSES BUTTON & BADGE
+   -------------------------------------------------------------------------- */
+.btn-archive-page {
+    background-color: #475569;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 9px 18px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-archive-page:hover {
+    background-color: #334155;
+    color: #ffffff;
+}
+
+.badge-count {
+    background: #0266cc;
+    color: #ffffff;
+    padding: 2px 7px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   FEATURE 2: PIN BUTTON & BADGE
+   -------------------------------------------------------------------------- */
+.btn-pin {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+
+.btn-pin:hover {
+    border-color: #0266cc;
+    color: #0266cc;
+}
+
+.btn-pin.pinned {
+    background: #0266cc;
+    color: #ffffff;
+    border-color: #0266cc;
+}
+
+.btn-pin.pinned:hover {
+    background: #0252a3;
+}
+
+.badge-pinned {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #eff6ff;
+    color: #0266cc;
+    border: 1px solid #bfdbfe;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* --------------------------------------------------------------------------
+   FEATURE 3: ARCHIVE TABLE BUTTON
+   -------------------------------------------------------------------------- */
+.btn-archive-table {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+
+.btn-archive-table:hover {
+    background: #fef3c7;
+    border-color: #d97706;
+    color: #b45309;
+}
+
+/* --------------------------------------------------------------------------
+   FEATURE 5: RESTORE BUTTON IN ARCHIVE
+   -------------------------------------------------------------------------- */
+.btn-restore-table {
+    background: #059669;
+    color: #ffffff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-restore-table:hover {
+    background: #047857;
+}
+
+/* --------------------------------------------------------------------------
+   2. BATCH CARD & TABLES
+   -------------------------------------------------------------------------- */
+.batch-card {
+    background: #ffffff;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+.batch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 16px 20px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.batch-header h2 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 1.2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.empty-batch-card {
+    background: #ffffff;
+    border-radius: 10px;
+    text-align: center;
+    color: #64748b;
+    padding: 50px 20px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+th {
+    text-align: left;
+    padding: 14px 16px;
+    color: #475569;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: #f8fafc;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+td {
+    padding: 14px 16px;
+    border-top: 1px solid #f1f5f9;
+    color: #1e293b;
+    font-size: 0.9rem;
+    vertical-align: middle;
+    word-wrap: break-word;
+}
+
+tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* Badges */
+.badge-subject {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.825rem;
+    font-weight: 600;
+    display: inline-block;
+    max-width: 100%;
+    word-break: break-word;
+    white-space: normal;
+}
+
+/* --------------------------------------------------------------------------
+   3. BUTTONS & ACTIONS
+   -------------------------------------------------------------------------- */
+.btn-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 7px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+
+.btn-add {
+    background-color: #10b981;
+    color: #ffffff;
+}
+
+.btn-add:hover {
+    background-color: #059669;
+}
+
+.btn-delete-table {
+    background-color: #ef4444;
+    color: #ffffff;
+}
+
+.btn-delete-table:hover {
+    background-color: #dc2626;
+}
+
+.btn-edit {
+    background-color: #3b82f6;
+    color: #ffffff;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.btn-edit:hover {
+    background-color: #2563eb;
+}
+
+.btn-edit-batch {
+    background-color: #0284c7;
+    color: #ffffff;
+}
+
+.btn-edit-batch:hover {
+    background-color: #0369a1;
+}
+
+.btn-remove {
+    background-color: #f59e0b;
+    color: #ffffff;
+}
+
+.btn-remove:hover {
+    background-color: #d97706;
+}
+
+.btn-secondary {
+    background-color: #64748b;
+    color: #ffffff;
+}
+
+.btn-secondary:hover {
+    background-color: #475569;
+}
+
+.start-btn {
+    border: none;
+    background: #0266cc;
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+}
+
+.start-btn:hover {
+    background: #0252a3;
+}
+
+.btn-comments {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    background-color: #0266cc;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-comments:hover {
+    background-color: #024da1;
+}
+
+.comment-badge {
+    background: #ef4444;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    margin-left: 4px;
+}
+
+.create-exam {
+    font-size: 0.95rem;
+    padding: 10px 18px;
+    border-radius: 7px;
+    box-shadow: 0 2px 6px rgba(2, 102, 204, 0.2);
+}
+
+.action-cell {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.inline-form {
+    display: inline-block;
+    margin: 0;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. MODAL DIALOG STYLES
+   -------------------------------------------------------------------------- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(2px);
+    overflow-y: auto;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    margin: 8% auto;
+    padding: 24px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.modal-header.text-danger h3 {
+    color: #ef4444;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #94a3b8;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+    color: #1e293b;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #334155;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+    background: #ffffff;
+    transition: border-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* --------------------------------------------------------------------------
+   5. RESPONSIVE DESIGN
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 20px;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .batch-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .btn-group {
+        width: 100%;
+    }
+
+    .btn-group .btn {
+        flex: 1;
+        justify-content: center;
+    }
+
+    table {
+        min-width: 600px;
+    }
+}

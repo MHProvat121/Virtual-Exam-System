@@ -1,0 +1,277 @@
+  :root {
+      --primary-color: #0056d2;
+      --primary-hover: #0041a3;
+      --text-dark: #000c24;
+      --text-muted: #5c677d;
+      --bg-left: #e3efff;
+      --bg-left-wave: #cbe0ff;
+      --border-color: #dbe2ef;
+      --input-bg: #fdfeff;
+      --font-family: 'Inter', sans-serif;
+  }
+
+  * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+  }
+
+  body {
+      font-family: var(--font-family);
+      background-color: #f4f7fc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+  }
+
+  .container {
+      display: flex;
+      width: 1000px;
+      max-width: 100%;
+      background-color: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Left Panel with Decorative Background */
+  .left-panel {
+      flex: 1.1;
+      background-color: var(--bg-left);
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      overflow: hidden;
+  }
+
+  /* Wave effects using pseudo-elements */
+  .left-panel::before,
+  .left-panel::after {
+      content: '';
+      position: absolute;
+      background: var(--bg-left-wave);
+      border-radius: 40%;
+  }
+
+  .left-panel::before {
+      width: 500px;
+      height: 500px;
+      top: -150px;
+      left: -150px;
+      opacity: 0.5;
+  }
+
+  .left-panel::after {
+      width: 600px;
+      height: 600px;
+      bottom: -200px;
+      left: -100px;
+      border-radius: 45%;
+      opacity: 0.7;
+  }
+
+  .illustration-card {
+      position: relative;
+      z-index: 2;
+      background: white;
+      padding: 40px;
+      border-radius: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 260px;
+      height: 260px;
+  }
+
+  /* Right Panel (Form) */
+  .right-panel {
+      flex: 1.9;
+      padding: 50px 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+  }
+
+  .header-section {
+      text-align: center;
+      margin-bottom: 30px;
+  }
+
+  .header-section h1 {
+      color: var(--text-dark);
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+  }
+
+  .header-section p {
+      color: var(--text-muted);
+      font-size: 16px;
+      font-weight: 500;
+  }
+
+  /* --------------Form Fields Styling -----------------*/ 
+
+  /* Form Fields Styling (Updated & Polished) */
+  /* 1. Base style for form containers */
+  .form-group {
+      margin-bottom: 20px;
+      position: relative;
+  }
+
+  .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #0c2356;
+      margin-bottom: 8px;
+  }
+
+  /* 2. Styling for all text inputs */
+  .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+      background-color: var(--input-bg);
+      color: var(--text-dark);
+      font-family: var(--font-family);
+  }
+
+  /* 3. STYLING FOR THE DROPDOWN (Forces it to match the inputs perfectly) */
+  .form-group select {
+      width: 100%;
+      /* Forces it to stretch full-width like the inputs */
+      padding: 12px 16px;
+      /* Gives it the exact same height/breathing room */
+      font-size: 0.95rem;
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+      background-color: var(--input-bg);
+      color: var(--text-dark);
+      font-family: var(--font-family);
+      cursor: pointer;
+
+      /* These 3 lines strip the ugly default browser drop arrow */
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+
+      /* Adds the clean custom down arrow chevron */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235c677d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 16px;
+      padding-right: 40px;
+  }
+
+  /* 4. Focus state when clicking the dropdown */
+  .form-group select:focus,
+  .form-group input:focus {
+      border-color: #0c2356;
+  }
+
+  /* 5. Keeps the inside dropdown text legible */
+  .form-group select option {
+      color: var(--text-dark);
+      background-color: #ffffff;
+  }
+
+
+  /* ---------------- toggle password-------------------
+   CHANGED THIS FROM .fa-eye TO .toggle-password 
+   This ensures positioning stays perfect whether it's fa-eye or fa-eye-slash
+*/
+  .toggle-password {
+      position: absolute;
+      bottom: 14px;
+      /* Perfectly centers it vertically relative to your input layout */
+      right: 15px;
+      /* Clean margin from the right edge */
+      cursor: pointer;
+      color: gray;
+      z-index: 2;
+      /* Forces the icon to layer above the text */
+  }
+
+  .btn-register {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-family);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.2s;
+  }
+
+  .btn-register:hover {
+      background-color: var(--primary-hover);
+  }
+
+  .footer-text {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 14px;
+      color: #000;
+  }
+
+  .footer-text a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+  }
+
+  .footer-text a:hover {
+      text-decoration: underline;
+  }
+
+  /* ---------------Responsive adjustments -------------------*/
+  @media (max-width: 850px) {
+      .container {
+          flex-direction: column;
+          max-width: 500px;
+      }
+
+      .left-panel {
+          padding: 40px 20px;
+          min-height: 200px;
+      }
+
+      .illustration-card {
+          width: 160px;
+          height: 160px;
+          padding: 20px;
+      }
+
+      .right-panel {
+          padding: 40px 30px;
+      }
+  }
+
+
+  .error-message {
+      padding: 12px;
+      background: #f8d7da;
+      border-radius: 6px;
+      font-size: 16px;
+      color: #a42834;
+      text-align: center;
+      margin-bottom: 20px;
+  }

@@ -1,0 +1,224 @@
+
+
+/* ==========================================================================
+   TABLE SECTION
+   ========================================================================== */
+
+.dashboard {
+    padding: 35px;
+    display: grid;
+    gap: 15px;
+}
+
+.dashboard h1 {
+    margin-bottom: 25px;
+    color: #1d2b53;
+}
+
+
+.table-section {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, .08);
+    overflow: hidden;
+}
+
+.table-header {
+    padding: 22px;
+    border-bottom: 1px solid #eee;
+    background-color: #c0d4ed;
+}
+
+.table-header h2 {
+    color: #1d2b53;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #fafafa;
+    text-align: left;
+    padding: 18px;
+    color: #444;
+}
+
+td {
+    padding: 18px;
+    border-top: 1px solid #eee;
+}
+
+tbody tr:hover {
+    background: #fafcff;
+}
+
+.start-btn {
+    border: none;
+    background: #1565c0;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.start-btn:hover {
+    background: #0d47a1;
+}
+
+@media(max-width:768px) {
+    .content-wrapper {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .dashboard {
+        padding: 20px;
+    }
+
+    table {
+        min-width: 700px;
+    }
+
+    .table-section {
+        overflow: auto;
+    }
+}
+
+/*====================================================
+    Form Container 
+====================================================*/
+/* Container Layout */
+.form-container {
+    max-width: 750px;
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 35px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+}
+
+.form-header {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f4f7fc;
+}
+
+.form-header h2 {
+    color: #0b1e36;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.form-header p {
+    color: #4b5563;
+    font-size: 14px;
+}
+
+/* Form Structural Rows & Groups */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-row .col {
+    flex: 1;
+}
+
+/* Labels and Inputs */
+label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.required {
+    color: #e11d48;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px 50px;
+    font-size: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #111827;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus,
+select:focus {
+    border-color: #0266cc;
+    box-shadow: 0 0 0 3px rgba(2, 102, 204, 0.15);
+}
+
+/* Calendar & Time Icon Customization */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: invert(0.3);
+}
+
+/* Submit Button */
+.form-actions {
+    margin-top: 10px;
+    text-align: right;
+}
+
+.btn-primary {
+    background-color: #0266cc;
+    color: #ffffff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    background-color: #0255a8;
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* Responsive adjustments for mobile screens */
+@media (max-width: 640px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .form-container {
+        padding: 20px;
+    }
+}

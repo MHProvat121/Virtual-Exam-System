@@ -1,0 +1,246 @@
+/* Global Reset & Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background-color: #0c2356;
+    /* The deep blue background color */
+    overflow-x: hidden;
+}
+
+/* Left Side: Brand Section */
+.brand-section {
+    flex: 1;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    position: relative;
+    /* Creates the smooth curved white shape on the right edge */
+    border-radius: 0 0 45% 0 / 0 0 100% 0;
+    z-index: 1;
+}
+
+.brand-container {
+    text-align: center;
+    max-width: 450px;
+}
+
+/* Custom SVG Logo matching the image */
+.logo {
+    width: 180px;
+    height: auto;
+    margin-bottom: 24px;
+}
+
+.brand-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #0c2356;
+    margin-bottom: 12px;
+}
+
+.brand-tagline {
+    font-size: 1.1rem;
+    color: #55637d;
+    font-weight: 500;
+}
+
+/* Right Side: Form Section */
+.form-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    z-index: 2;
+}
+
+/* The White Login Card */
+.login-card {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 460px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card-header h2 {
+    font-size: 1.75rem;
+    color: #0c2356;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.card-header p {
+    font-size: 0.95rem;
+    color: #6c757d;
+    margin-bottom: 28px;
+}
+
+/* Form Fields Styling */
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+    /* Crucial for absolute positioning of the icon */
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #0c2356;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    /* Ensures padding doesn't stretch input width */
+}
+
+/* Ensure password text doesn't flow underneath the eye icon */
+.form-group input.password-field {
+    padding-right: 40px;
+}
+
+.form-group input::placeholder {
+    color: #adb5bd;
+}
+
+.form-group input:focus {
+    border-color: #0c2356;
+}
+
+/* 
+   CHANGED THIS FROM .fa-eye TO .toggle-password 
+   This ensures positioning stays perfect whether it's fa-eye or fa-eye-slash
+*/
+.toggle-password {
+    position: absolute;
+    bottom: 14px;
+    /* Perfectly centers it vertically relative to your input layout */
+    right: 15px;
+    /* Clean margin from the right edge */
+    cursor: pointer;
+    color: gray;
+    z-index: 2;
+    /* Forces the icon to layer above the text */
+}
+
+/* Row containing Remember Me & Forgot Password */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+}
+
+/* Fixed Side-by-Side Checkbox Layout */
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #333333;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.remember-me input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #0c2356;
+}
+
+.forgot-password {
+    color: #0044cc;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Login Button Styling */
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #0044cc;
+    /* Vibrant blue button */
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 24px;
+}
+
+.login-btn:hover {
+    background-color: #0033aa;
+}
+
+/* Footer Register Link */
+.card-footer {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #333333;
+}
+
+.card-footer a {
+    color: #0044cc;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 4px;
+}
+
+.card-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Mobile Adjustments */
+@media (max-width: 900px) {
+    body {
+        flex-direction: column;
+    }
+
+    .brand-section {
+        border-radius: 0 0 50% 50% / 0 0 20px 20px;
+        padding: 60px 20px 40px 20px;
+    }
+
+    .form-section {
+        padding: 20px;
+    }
+}
+
+
+
+.error-message {
+    padding: 12px;
+    background: #f8d7da;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #a42834;
+    text-align: center;
+    margin-bottom: 20px;
+}

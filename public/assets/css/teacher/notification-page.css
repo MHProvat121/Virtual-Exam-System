@@ -1,0 +1,124 @@
+/* ==========================================================================
+   EXAM QUESTIONS TABLE STYLES
+   ========================================================================== */
+
+.dashboard {
+    padding: 35px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.dashboard h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1d2b53;
+}
+
+/* Table Section Wrapper */
+.table-section {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+
+.table-header {
+    background: #a0bdd9;
+    padding: 18px 22px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.table-header h2 {
+    color: #1d2b53;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    padding: 16px 18px;
+    color: #475569;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+td {
+    padding: 16px 18px;
+    border-top: 1px solid #f1f5f9;
+    color: #1e293b;
+    font-size: 0.9rem;
+}
+
+tbody tr:hover {
+    background: #fafcff;
+}
+
+/* Buttons */
+.start-btn {
+    border: none;
+    background: #0266cc;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.start-btn:hover {
+    background: #0252a3;
+}
+
+.start-btn:active {
+    transform: scale(0.98);
+}
+
+.action-footer {
+    margin-top: 10px;
+}
+
+.create-exam {
+    font-size: 1rem;
+    padding: 12px 24px;
+    border-radius: 8px;
+    background-color: #0266cc;
+    box-shadow: 0 2px 6px rgba(2, 102, 204, 0.2);
+}
+
+.create-exam:hover {
+    background-color: #0252a3;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 20px;
+    }
+
+    table {
+        min-width: 700px;
+    }
+
+    .create-exam {
+        width: 100%;
+        justify-content: center;
+    }
+}

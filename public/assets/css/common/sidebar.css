@@ -1,0 +1,256 @@
+/* Sidebar Layout Dimensions & Variables */
+:root {
+    --sidebar-width: 260px;
+    --sidebar-collapsed-width: 78px;
+    --sidebar-bg: #0b1e36;
+    --sidebar-hover: #162e4e;
+    --sidebar-active: #1c3d69;
+    --border-color: #1e3a5f;
+    --primary-blue: #0266cc;
+    --text-muted: #9ca3af;
+}
+
+/* Core Sidebar Container */
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    background-color: var(--sidebar-bg);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+/* Sidebar Header & Toggle Button */
+.sidebar-header {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo .logo-icon {
+    font-size: 1.3rem;
+    color: var(--primary-blue);
+    background: rgba(2, 102, 204, 0.15);
+    padding: 10px;
+    border-radius: 8px;
+    min-width: 40px;
+    text-align: center;
+}
+
+.brand-title {
+    font-size: small;
+    font-weight: 700;
+    color: #ffffff;
+    transition: opacity 0.2s ease;
+}
+
+/* Professional Chevron Toggle Button */
+.toggle-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #448ae7;;
+    color: #e8ecf3;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+    background-color: var(--primary-blue);
+    color: #ffffff;
+    border-color: var(--primary-blue);
+}
+
+.toggle-icon {
+    font-size: 0.85rem;
+    transition: transform 0.3s ease;
+}
+
+/* Section Label Badge */
+.portal-badge-container {
+    padding: 12px 16px 8px 16px;
+    margin-bottom: 6px;
+    white-space: nowrap;
+}
+
+.portal-label {
+    display: inline-block;
+    font-size: .9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #60a5fa;
+    background-color: rgba(2, 102, 204, 0.2);
+    padding: 3px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(2, 102, 204, 0.3);
+    transition: opacity 0.2s ease;
+}
+
+/* Navigation Links */
+.sidebar-nav {
+    flex: 1;
+    padding: 12px 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 14px;
+    color: #d1d5db;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+    position: relative;
+}
+
+.nav-icon {
+    font-size: 1.15rem;
+    min-width: 22px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.nav-link:hover {
+    background-color: var(--sidebar-hover);
+    color: #ffffff;
+}
+
+.nav-link:hover .nav-icon {
+    color: #ffffff;
+}
+
+.nav-link.active {
+    background-color: var(--sidebar-active);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.nav-link.active .nav-icon {
+    color: var(--primary-blue);
+}
+
+.badge {
+    margin-left: auto;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background-color: var(--primary-blue);
+    color: #ffffff;
+}
+
+/* Sidebar Footer / Logout */
+.sidebar-footer {
+    padding: 12px 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 14px;
+    color: #ef4444;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+.logout-btn:hover {
+    background-color: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+}
+
+.logout-icon {
+    font-size: 1.15rem;
+    min-width: 22px;
+    text-align: center;
+}
+
+/* ===================================================
+   COLLAPSED STATE STYLES (.sidebar.collapsed)
+   =================================================== */
+
+.sidebar.collapsed {
+    width: var(--sidebar-collapsed-width);
+}
+
+.sidebar.collapsed .brand-title,
+.sidebar.collapsed .link-text,
+.sidebar.collapsed .portal-badge-container,
+.sidebar.collapsed .badge {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+}
+
+.sidebar.collapsed .toggle-icon {
+    transform: rotate(180deg);
+}
+
+.sidebar.collapsed .sidebar-header {
+    justify-content: center;
+    padding: 0 10px;
+}
+
+.sidebar.collapsed .brand-logo {
+    display: none;
+}
+
+/* Tooltip on Hover when Collapsed */
+.sidebar.collapsed .nav-link:hover::after,
+.sidebar.collapsed .logout-btn:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #1f2937;
+    color: #ffffff;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 1001;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+}
