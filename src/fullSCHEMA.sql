@@ -346,128 +346,37 @@ CREATE TABLE IF NOT EXISTS `users-table` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ==============================================================================
--- SQL MIGRATION QUERY FOR STUDENT ENROLLMENT & WITHDRAWAL SYSTEM
--- Safe & idempotent script: Copy and paste directly into phpMyAdmin or MySQL CLI.
--- Includes full tracking for Enrollment, Withdrawal, Cancellations, and Timestamps.
+-- OPTIONAL MIGRATION / UPGRADE STATEMENTS FOR EXISTING LIVE DATABASES
+-- (100% Pure SQL: Zero Procedures, Zero Delimiters, Zero Triggers)
+-- Safe to run in phpMyAdmin on shared hosts like InfinityFree without Error #1370
 -- ==============================================================================
 
--- ------------------------------------------------------------------------------
--- 1. SAFE ADDITION OF ENROLLMENT & WITHDRAWAL TRACKING COLUMNS
--- (Idempotent: checks information_schema before adding columns to avoid #1060 errors)
--- ------------------------------------------------------------------------------
-DELIMITER $$
-DROP PROCEDURE IF EXISTS `upgrade_enrollment_columns_if_missing`$$
-CREATE PROCEDURE `upgrade_enrollment_columns_if_missing`()
-BEGIN
-    -- Check & add enroll_requested_at
-    IF NOT EXISTS (
-        SELECT 1 FROM information_schema.COLUMNS 
-        WHERE TABLE_SCHEMA = DATABASE() 
-          AND TABLE_NAME = 'student_enrollments' 
-          AND COLUMN_NAME = 'enroll_requested_at'
-    ) THEN
-        ALTER TABLE `student_enrollments`
-          ADD COLUMN `enroll_requested_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Timestamp when student submitted enrollment request' AFTER `payment_slip`;
-    END IF;
+-- 1. Safely add missing columns to existing batches table
+ALTER TABLE `batches`
+  ADD COLUMN IF NOT EXISTS `course_code` varchar(100) DEFAULT NULL COMMENT 'Course / Subject code (e.g. CSE-101)' AFTER `batch`,
+  ADD COLUMN IF NOT EXISTS `credit` varchar(50) DEFAULT NULL COMMENT 'Course Credit (e.g. 3.0, 1.5, 4.0)' AFTER `course_code`;
 
-    -- Check & add cancellation tracking columns
-    IF NOT EXISTS (
-        SELECT 1 FROM information_schema.COLUMNS 
-        WHERE TABLE_SCHEMA = DATABASE() 
-          AND TABLE_NAME = 'student_enrollments' 
-          AND COLUMN_NAME = 'cancelled_by_id'
-    ) THEN
-        ALTER TABLE `student_enrollments`
-          ADD COLUMN `cancelled_by_id` VARCHAR(50) DEFAULT NULL COMMENT 'Admin ID who cancelled enrollment request' AFTER `cancellation_reason`,
-          ADD COLUMN `cancelled_by_name` VARCHAR(100) DEFAULT NULL COMMENT 'Admin Full Name who cancelled enrollment request' AFTER `cancelled_by_id`,
-          ADD COLUMN `cancelled_at` TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp when Admin cancelled enrollment request' AFTER `cancelled_by_name`;
-    END IF;
+-- 2. Safely add missing answer_image column to existing student_answers table
+ALTER TABLE `student_answers`
+  ADD COLUMN IF NOT EXISTS `answer_image` text DEFAULT NULL COMMENT 'Path or JSON array of uploaded answer image(s)' AFTER `answer_text`;
 
-    -- Check & add withdrawal lifecycle tracking columns
-    IF NOT EXISTS (
-        SELECT 1 FROM information_schema.COLUMNS 
-        WHERE TABLE_SCHEMA = DATABASE() 
-          AND TABLE_NAME = 'student_enrollments' 
-          AND COLUMN_NAME = 'withdraw_status'
-    ) THEN
-        ALTER TABLE `student_enrollments`
-          ADD COLUMN `withdraw_status` ENUM('None','Pending','Withdrawn','Rejected') NOT NULL DEFAULT 'None' COMMENT 'Withdrawal Status' AFTER `enrolled_at`,
-          ADD COLUMN `withdraw_reason` TEXT DEFAULT NULL COMMENT 'Reason for course/batch withdrawal' AFTER `withdraw_status`,
-          ADD COLUMN `withdraw_requested_at` TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp when student requested withdrawal' AFTER `withdraw_reason`,
-          ADD COLUMN `withdraw_action_at` TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp when admin processed withdrawal' AFTER `withdraw_requested_at`,
-          ADD COLUMN `withdraw_reviewed_by_id` VARCHAR(50) DEFAULT NULL COMMENT 'Admin ID who reviewed withdrawal' AFTER `withdraw_action_at`,
-          ADD COLUMN `withdraw_reviewed_by_name` VARCHAR(100) DEFAULT NULL COMMENT 'Admin Full Name who reviewed withdrawal' AFTER `withdraw_reviewed_by_id`;
-    END IF;
+-- 3. Safely add all missing tracking columns to existing student_enrollments table
+ALTER TABLE `student_enrollments`
+  ADD COLUMN IF NOT EXISTS `enroll_requested_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Timestamp when student submitted enrollment request' AFTER `payment_slip`,
+  ADD COLUMN IF NOT EXISTS `cancelled_by_id` varchar(50) DEFAULT NULL COMMENT 'Admin ID who cancelled enrollment request' AFTER `cancellation_reason`,
+  ADD COLUMN IF NOT EXISTS `cancelled_by_name` varchar(100) DEFAULT NULL COMMENT 'Admin Full Name who cancelled enrollment request' AFTER `cancelled_by_id`,
+  ADD COLUMN IF NOT EXISTS `cancelled_at` timestamp NULL DEFAULT NULL COMMENT 'Timestamp when Admin cancelled enrollment request' AFTER `cancelled_by_name`,
+  ADD COLUMN IF NOT EXISTS `withdraw_status` enum('None','Pending','Withdrawn','Rejected') NOT NULL DEFAULT 'None' COMMENT 'Withdrawal Status' AFTER `enrolled_at`,
+  ADD COLUMN IF NOT EXISTS `withdraw_reason` text DEFAULT NULL COMMENT 'Reason for course/batch withdrawal' AFTER `withdraw_status`,
+  ADD COLUMN IF NOT EXISTS `withdraw_requested_at` timestamp NULL DEFAULT NULL COMMENT 'Timestamp when student requested withdrawal' AFTER `withdraw_reason`,
+  ADD COLUMN IF NOT EXISTS `withdraw_action_at` timestamp NULL DEFAULT NULL COMMENT 'Timestamp when admin processed withdrawal' AFTER `withdraw_requested_at`,
+  ADD COLUMN IF NOT EXISTS `withdraw_reviewed_by_id` varchar(50) DEFAULT NULL COMMENT 'Admin ID who reviewed withdrawal' AFTER `withdraw_action_at`,
+  ADD COLUMN IF NOT EXISTS `withdraw_reviewed_by_name` varchar(100) DEFAULT NULL COMMENT 'Admin Full Name who reviewed withdrawal' AFTER `withdraw_reviewed_by_id`,
+  ADD COLUMN IF NOT EXISTS `withdraw_cancelled_by_id` varchar(50) DEFAULT NULL COMMENT 'Admin ID who cancelled/rejected withdrawal' AFTER `withdraw_reviewed_by_name`,
+  ADD COLUMN IF NOT EXISTS `withdraw_cancelled_by_name` varchar(100) DEFAULT NULL COMMENT 'Admin Full Name who cancelled/rejected withdrawal' AFTER `withdraw_cancelled_by_id`,
+  ADD COLUMN IF NOT EXISTS `withdraw_cancelled_at` timestamp NULL DEFAULT NULL COMMENT 'Timestamp when admin cancelled/rejected withdrawal' AFTER `withdraw_cancelled_by_name`;
 
-    -- Check & add withdrawal cancellation / rejection tracking columns
-    IF NOT EXISTS (
-        SELECT 1 FROM information_schema.COLUMNS 
-        WHERE TABLE_SCHEMA = DATABASE() 
-          AND TABLE_NAME = 'student_enrollments' 
-          AND COLUMN_NAME = 'withdraw_cancelled_by_id'
-    ) THEN
-        ALTER TABLE `student_enrollments`
-          ADD COLUMN `withdraw_cancelled_by_id` VARCHAR(50) DEFAULT NULL COMMENT 'Admin ID who cancelled/rejected withdrawal' AFTER `withdraw_reviewed_by_name`,
-          ADD COLUMN `withdraw_cancelled_by_name` VARCHAR(100) DEFAULT NULL COMMENT 'Admin Full Name who cancelled/rejected withdrawal' AFTER `withdraw_cancelled_by_id`,
-          ADD COLUMN `withdraw_cancelled_at` TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp when admin cancelled/rejected withdrawal' AFTER `withdraw_cancelled_by_name`;
-    END IF;
-END$$
-DELIMITER ;
-
-CALL `upgrade_enrollment_columns_if_missing`();
-DROP PROCEDURE IF EXISTS `upgrade_enrollment_columns_if_missing`;
-
--- ------------------------------------------------------------------------------
--- 2. CREATE TABLE FOR SELECTED ENROLLMENT COURSES (SELECT TO ENROLL)
--- ------------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `student_enrollment_courses` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `enrollment_id` INT(11) NOT NULL COMMENT 'FK to student_enrollments.id',
-  `course_code` VARCHAR(100) NOT NULL COMMENT 'Checked course code for enrollment',
-  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_enrollment_course` (`enrollment_id`, `course_code`),
-  CONSTRAINT `fk_courses_enrollment` FOREIGN KEY (`enrollment_id`) REFERENCES `student_enrollments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ------------------------------------------------------------------------------
--- 3. CREATE TABLE FOR SELECTED WITHDRAWAL COURSES (SELECT TO WITHDRAW)
--- ------------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `student_withdrawal_courses` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `enrollment_id` INT(11) NOT NULL COMMENT 'FK to student_enrollments.id',
-  `course_code` VARCHAR(100) NOT NULL COMMENT 'Checked course code for withdrawal',
-  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_withdrawal_course` (`enrollment_id`, `course_code`),
-  CONSTRAINT `fk_withdrawal_enrollment` FOREIGN KEY (`enrollment_id`) REFERENCES `student_enrollments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ------------------------------------------------------------------------------
--- 4. ENSURE `credit` COLUMN IN `batches` TABLE (Already in schema, safe check)
--- ------------------------------------------------------------------------------
-DELIMITER $$
-DROP PROCEDURE IF EXISTS `add_credit_column_if_missing`$$
-CREATE PROCEDURE `add_credit_column_if_missing`()
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM information_schema.COLUMNS 
-        WHERE TABLE_SCHEMA = DATABASE() 
-          AND TABLE_NAME = 'batches' 
-          AND COLUMN_NAME = 'credit'
-    ) THEN
-        ALTER TABLE `batches` ADD COLUMN `credit` VARCHAR(50) DEFAULT NULL COMMENT 'Course Credit (e.g. 3.0, 1.5, 4.0)' AFTER `course_code`;
-    END IF;
-END$$
-DELIMITER ;
-
-CALL `add_credit_column_if_missing`();
-DROP PROCEDURE IF EXISTS `add_credit_column_if_missing`;
-
--- ------------------------------------------------------------------------------
--- 5. VERIFY / BACKFILL EXISTING CANCELLED OR REJECTED RECORDS (FROM QUERY.TXT)
--- ------------------------------------------------------------------------------
--- Backfill enrollment cancelled tracking from legacy reviewed_by fields if status was Cancelled
+-- 4. Backfill historical records for consistency
 UPDATE `student_enrollments`
 SET `cancelled_by_id` = `reviewed_by_id`,
     `cancelled_by_name` = `reviewed_by_name`,
@@ -476,7 +385,6 @@ WHERE `status` = 'Cancelled'
   AND `cancelled_by_name` IS NULL
   AND `reviewed_by_name` IS NOT NULL;
 
--- Backfill withdrawal cancelled/rejected tracking from legacy withdraw_reviewed_by fields
 UPDATE `student_enrollments`
 SET `withdraw_cancelled_by_id` = `withdraw_reviewed_by_id`,
     `withdraw_cancelled_by_name` = `withdraw_reviewed_by_name`,
@@ -485,48 +393,17 @@ WHERE `withdraw_status` = 'Rejected'
   AND `withdraw_cancelled_by_name` IS NULL
   AND `withdraw_reviewed_by_name` IS NOT NULL;
 
--- Backfill enroll_requested_at from created_at for existing records
 UPDATE `student_enrollments`
 SET `enroll_requested_at` = COALESCE(`created_at`, `updated_at`, NOW())
 WHERE `enroll_requested_at` IS NULL 
   AND (`amount` > 0.00 OR `payment_method` NOT IN ('None', '') OR `transaction_id` != '' OR `status` = 'Pending');
 
--- Backfill withdraw_requested_at from action_at or updated_at for existing withdrawal records
 UPDATE `student_enrollments`
 SET `withdraw_requested_at` = COALESCE(`withdraw_action_at`, `updated_at`, `created_at`, NOW())
 WHERE `withdraw_requested_at` IS NULL 
   AND `withdraw_status` IN ('Pending', 'Withdrawn', 'Rejected');
 
--- ------------------------------------------------------------------------------
--- 6. DATABASE TRIGGER: AUTOMATICALLY CLEAN UP ENROLLMENTS & WITHDRAWALS ON BATCH/COURSE DELETION
--- ------------------------------------------------------------------------------
-DELIMITER $$
-DROP TRIGGER IF EXISTS `trg_after_batch_delete`$$
-CREATE TRIGGER `trg_after_batch_delete`
-AFTER DELETE ON `batches`
-FOR EACH ROW
-BEGIN
-    -- If no more courses exist for this batch name in `batches`, remove its enrollment & withdrawal records
-    IF NOT EXISTS (SELECT 1 FROM `batches` WHERE `batch` = OLD.batch) THEN
-        DELETE FROM `student_enrollments` WHERE `batch` = OLD.batch;
-    ELSE
-        -- If other courses still exist in the batch, clean up the specific deleted course code
-        IF OLD.course_code IS NOT NULL AND OLD.course_code != '' THEN
-            DELETE ec FROM `student_enrollment_courses` ec
-            JOIN `student_enrollments` e ON ec.enrollment_id = e.id
-            WHERE e.batch = OLD.batch AND ec.course_code = OLD.course_code;
-
-            DELETE wc FROM `student_withdrawal_courses` wc
-            JOIN `student_enrollments` e ON wc.enrollment_id = e.id
-            WHERE e.batch = OLD.batch AND wc.course_code = OLD.course_code;
-        END IF;
-    END IF;
-END$$
-DELIMITER ;
-
--- ------------------------------------------------------------------------------
--- 7. ONE-TIME CLEANUP QUERY TO PURGE EXISTING ORPHANED ENROLLMENTS / WITHDRAWALS
--- ------------------------------------------------------------------------------
+-- 5. Clean up orphaned enrollments
 DELETE e FROM `student_enrollments` e
 LEFT JOIN `batches` b ON e.batch COLLATE utf8mb4_unicode_ci = b.batch COLLATE utf8mb4_unicode_ci
 WHERE b.id IS NULL;
