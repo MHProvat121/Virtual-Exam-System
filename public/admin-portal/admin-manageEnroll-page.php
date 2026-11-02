@@ -26,9 +26,8 @@ if ($dbConn) {
     try {
         $dbConn->exec("
             UPDATE `student_enrollments` 
-            SET `enroll_requested_at` = NULL, `status` = 'Unenrolled' 
+            SET `status` = 'Unenrolled' 
             WHERE `withdraw_status` IN ('Pending', 'Withdrawn', 'Rejected') 
-              AND `withdraw_requested_at` IS NOT NULL 
               AND (`amount` = 0.00 OR `amount` IS NULL) 
               AND (`payment_method` = 'None' OR `payment_method` = '' OR `payment_method` IS NULL)
         ");
@@ -56,6 +55,20 @@ function formatAvatarUrl(?string $path): string {
     if (strpos($path, 'assets/') === 0) return '../' . $path;
     if (strpos($path, '../') === 0) return $path;
     return '../' . ltrim($path, '/');
+}
+
+// Safe string truncation helper (works whether or not mbstring is installed)
+if (!function_exists('safe_strimwidth')) {
+    function safe_strimwidth(?string $str, int $start, int $width, string $trimmarker = '...'): string {
+        if ($str === null || $str === '') return '';
+        if (function_exists('mb_strimwidth')) {
+            return mb_strimwidth($str, $start, $width, $trimmarker);
+        }
+        if (strlen($str) <= $width) return $str;
+        $markerLen = strlen($trimmarker);
+        $subLen = max(0, $width - $markerLen);
+        return substr($str, $start, $subLen) . $trimmarker;
+    }
 }
 
 // 4. Fetch Admin Details
@@ -139,27 +152,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                         'eid'    => $enrollmentId
                     ]);
                 } catch (PDOException $ex) {
-                    // Fallback in case optional columns like approved_by_id or enrolled_at are missing
-                    $stmtUpd = $dbConn->prepare("
-                        UPDATE `student_enrollments` 
-                        SET `status` = 'Enrolled', 
-                            `withdraw_status` = 'None',
-                            `withdraw_reason` = NULL,
-                            `withdraw_requested_at` = NULL,
-                            `withdraw_action_at` = NULL,
-                            `withdraw_reviewed_by_id` = NULL,
-                            `withdraw_reviewed_by_name` = NULL,
-                            `reviewed_by_id` = :aid, 
-                            `reviewed_by_name` = :aname, 
-                            `action_at` = NOW(),
-                            `cancellation_reason` = NULL 
-                        WHERE `id` = :eid
-                    ");
-                    $stmtUpd->execute([
-                        'aid'   => $adminCode, 
-                        'aname' => $adminName, 
-                        'eid'   => $enrollmentId
-                    ]);
+                    // Fallback in case optional columns like approved_by_id, enrolled_at, or withdraw_requested_at are missing
+                    try {
+                        $stmtUpd = $dbConn->prepare("
+                            UPDATE `student_enrollments` 
+                            SET `status` = 'Enrolled', 
+                                `withdraw_status` = 'None',
+                                `withdraw_reason` = NULL,
+                                `reviewed_by_id` = :aid, 
+                                `reviewed_by_name` = :aname, 
+                                `action_at` = NOW(),
+                                `cancellation_reason` = NULL 
+                            WHERE `id` = :eid
+                        ");
+                        $stmtUpd->execute([
+                            'aid'   => $adminCode, 
+                            'aname' => $adminName, 
+                            'eid'   => $enrollmentId
+                        ]);
+                    } catch (PDOException $ex2) {
+                        try {
+                            $dbConn->prepare("UPDATE `student_enrollments` SET `status` = 'Enrolled' WHERE `id` = ?")->execute([$enrollmentId]);
+                        } catch (PDOException $ex3) {}
+                    }
                 }
 
                 // Clear any conflicting withdrawal records and older cancelled enrollment records for this student and batch
@@ -722,34 +737,64 @@ try {
     // Non-fatal if index already dropped or not permitted
 }
 
-// Ensure cancelled columns exist in student_enrollments
+// Inspect existing columns in student_enrollments safely
+$seCols = [];
 try {
-    $colCheck = $dbConn->query("SHOW COLUMNS FROM `student_enrollments` LIKE 'cancelled_by_id'")->fetch();
-    if (!$colCheck) {
+    $qCols = $dbConn->query("SHOW COLUMNS FROM `student_enrollments`");
+    if ($qCols) {
+        while ($colRow = $qCols->fetch(PDO::FETCH_ASSOC)) {
+            $seCols[strtolower($colRow['Field'])] = true;
+        }
+    }
+} catch (PDOException $e) {}
+
+// Ensure cancelled columns exist in student_enrollments if possible
+$hasCancelledCols = isset($seCols['cancelled_by_id']);
+if (!$hasCancelledCols) {
+    try {
         $dbConn->exec("ALTER TABLE `student_enrollments` 
             ADD `cancelled_by_id` varchar(50) DEFAULT NULL COMMENT 'Admin ID who cancelled enrollment request' AFTER `cancellation_reason`,
             ADD `cancelled_by_name` varchar(100) DEFAULT NULL COMMENT 'Admin Full Name who cancelled enrollment request' AFTER `cancelled_by_id`,
             ADD `cancelled_at` timestamp NULL DEFAULT NULL COMMENT 'Timestamp when Admin cancelled enrollment request' AFTER `cancelled_by_name`");
-    }
-} catch (PDOException $e) {}
+        $hasCancelledCols = true;
+        $seCols['cancelled_by_id'] = true;
+    } catch (PDOException $e) {}
+}
 
-try {
-    $colCheckReq = $dbConn->query("SHOW COLUMNS FROM `student_enrollments` LIKE 'enroll_requested_at'")->fetch();
-    if (!$colCheckReq) {
+// Check enroll_requested_at column
+$hasEnrollReqCol = isset($seCols['enroll_requested_at']);
+if (!$hasEnrollReqCol) {
+    try {
         $dbConn->exec("ALTER TABLE `student_enrollments` 
             ADD `enroll_requested_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Timestamp when student submitted enrollment request' AFTER `payment_slip`");
-    }
-} catch (PDOException $e) {}
+        $hasEnrollReqCol = true;
+        $seCols['enroll_requested_at'] = true;
+    } catch (PDOException $e) {}
+}
 
-try {
-    $colCheckW = $dbConn->query("SHOW COLUMNS FROM `student_enrollments` LIKE 'withdraw_cancelled_by_id'")->fetch();
-    if (!$colCheckW) {
+// Check withdraw_cancelled columns
+$hasWithdrawCancelledCols = isset($seCols['withdraw_cancelled_by_id']);
+if (!$hasWithdrawCancelledCols) {
+    try {
         $dbConn->exec("ALTER TABLE `student_enrollments` 
             ADD `withdraw_cancelled_by_id` varchar(50) DEFAULT NULL COMMENT 'Admin ID who cancelled/rejected withdrawal' AFTER `withdraw_reviewed_by_name`,
             ADD `withdraw_cancelled_by_name` varchar(100) DEFAULT NULL COMMENT 'Admin Full Name who cancelled/rejected withdrawal' AFTER `withdraw_cancelled_by_id`,
             ADD `withdraw_cancelled_at` timestamp NULL DEFAULT NULL COMMENT 'Timestamp when admin cancelled/rejected withdrawal' AFTER `withdraw_cancelled_by_name`");
-    }
-} catch (PDOException $e) {}
+        $hasWithdrawCancelledCols = true;
+        $seCols['withdraw_cancelled_by_id'] = true;
+    } catch (PDOException $e) {}
+}
+
+// Check withdraw_requested_at column
+$hasWithdrawReqCol = isset($seCols['withdraw_requested_at']);
+if (!$hasWithdrawReqCol) {
+    try {
+        $dbConn->exec("ALTER TABLE `student_enrollments` 
+            ADD `withdraw_requested_at` timestamp NULL DEFAULT NULL COMMENT 'Timestamp when student requested withdrawal' AFTER `withdraw_reason`");
+        $hasWithdrawReqCol = true;
+        $seCols['withdraw_requested_at'] = true;
+    } catch (PDOException $e) {}
+}
 
 // Fetch all batch courses with credits and subject for dropdown and credit calculations
 $batchCourseCatalog = [];
@@ -812,6 +857,19 @@ if (!function_exists('getEnrollmentCoursesAndCredit')) {
     }
 }
 
+// Dynamic filter expressions that work whether or not enroll_requested_at / withdraw_requested_at exist
+$enrollWhereClause = $hasEnrollReqCol 
+    ? "AND e.enroll_requested_at IS NOT NULL" 
+    : "AND ((e.payment_method IS NOT NULL AND e.payment_method NOT IN ('None', '')) OR e.amount > 0.00 OR (e.transaction_id IS NOT NULL AND e.transaction_id != '') OR e.withdraw_status = 'None' OR e.status = 'Pending')";
+
+$withdrawWhereClause = $hasWithdrawReqCol
+    ? "AND e.withdraw_requested_at IS NOT NULL"
+    : "AND (e.withdraw_status IN ('Pending', 'Withdrawn', 'Rejected') AND ((e.withdraw_reason IS NOT NULL AND e.withdraw_reason != '') OR e.withdraw_status != 'None'))";
+
+$withdrawOrderBy = $hasWithdrawReqCol
+    ? "ORDER BY COALESCE(e.withdraw_requested_at, e.updated_at, e.created_at) DESC, e.id DESC"
+    : "ORDER BY COALESCE(e.updated_at, e.created_at) DESC, e.id DESC";
+
 // 6. Fetch Enrollment Stats Overview
 $stats = [
     'total' => 0,
@@ -837,7 +895,7 @@ try {
               AND e.batch COLLATE utf8mb4_unicode_ci = active_enr.batch COLLATE utf8mb4_unicode_ci
               AND active_enr.status = 'Enrolled'
         WHERE (e.cancellation_reason IS NULL OR e.cancellation_reason != 'Cancelled by student')
-          AND e.enroll_requested_at IS NOT NULL
+          {$enrollWhereClause}
           AND e.status IN ('Pending', 'Enrolled', 'Cancelled')
           AND (e.status != 'Cancelled' OR active_enr.id IS NULL)
     ");
@@ -850,6 +908,26 @@ try {
     }
 } catch (PDOException $e) {
     error_log("Error fetching enrollment stats: " . $e->getMessage());
+    try {
+        $stmtStatsFallback = $dbConn->query("
+            SELECT 
+                COUNT(DISTINCT e.id) AS total_count,
+                SUM(CASE WHEN e.status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
+                SUM(CASE WHEN e.status = 'Enrolled' THEN 1 ELSE 0 END) AS enrolled_count,
+                SUM(CASE WHEN e.status = 'Cancelled' THEN 1 ELSE 0 END) AS cancelled_count,
+                SUM(CASE WHEN e.status = 'Enrolled' THEN e.amount ELSE 0 END) AS total_revenue
+            FROM `student_enrollments` e
+            WHERE (e.cancellation_reason IS NULL OR e.cancellation_reason != 'Cancelled by student')
+              AND e.status IN ('Pending', 'Enrolled', 'Cancelled')
+        ");
+        if ($sRow = $stmtStatsFallback->fetch(PDO::FETCH_ASSOC)) {
+            $stats['total']     = (int)($sRow['total_count'] ?? 0);
+            $stats['pending']   = (int)($sRow['pending_count'] ?? 0);
+            $stats['enrolled']  = (int)($sRow['enrolled_count'] ?? 0);
+            $stats['cancelled'] = (int)($sRow['cancelled_count'] ?? 0);
+            $stats['revenue']   = (float)($sRow['total_revenue'] ?? 0.00);
+        }
+    } catch (PDOException $ex2) {}
 }
 
 // 7. Fetch Withdrawal Stats Overview
@@ -864,9 +942,9 @@ try {
     $stmtWStats = $dbConn->query("
         SELECT 
             COUNT(DISTINCT e.id) AS total_count,
-            SUM(CASE WHEN e.withdraw_status = 'Pending' AND e.withdraw_requested_at IS NOT NULL THEN 1 ELSE 0 END) AS pending_count,
-            SUM(CASE WHEN e.withdraw_status = 'Withdrawn' AND e.withdraw_requested_at IS NOT NULL THEN 1 ELSE 0 END) AS withdrawn_count,
-            SUM(CASE WHEN e.withdraw_status = 'Rejected' AND e.withdraw_requested_at IS NOT NULL THEN 1 ELSE 0 END) AS rejected_count
+            SUM(CASE WHEN e.withdraw_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
+            SUM(CASE WHEN e.withdraw_status = 'Withdrawn' THEN 1 ELSE 0 END) AS withdrawn_count,
+            SUM(CASE WHEN e.withdraw_status = 'Rejected' THEN 1 ELSE 0 END) AS rejected_count
         FROM `student_enrollments` e
         INNER JOIN (SELECT DISTINCT `batch` FROM `batches`) b 
                 ON e.batch COLLATE utf8mb4_unicode_ci = b.batch COLLATE utf8mb4_unicode_ci
@@ -875,7 +953,7 @@ try {
               AND e.batch COLLATE utf8mb4_unicode_ci = active_w.batch COLLATE utf8mb4_unicode_ci
               AND active_w.withdraw_status = 'Withdrawn'
         WHERE e.withdraw_status IN ('Pending', 'Withdrawn', 'Rejected')
-          AND e.withdraw_requested_at IS NOT NULL
+          {$withdrawWhereClause}
           AND (e.withdraw_status != 'Rejected' OR active_w.id IS NULL)
     ");
     if ($wRow = $stmtWStats->fetch(PDO::FETCH_ASSOC)) {
@@ -886,6 +964,23 @@ try {
     }
 } catch (PDOException $e) {
     error_log("Error fetching withdrawal stats: " . $e->getMessage());
+    try {
+        $stmtWStatsFallback = $dbConn->query("
+            SELECT 
+                COUNT(DISTINCT e.id) AS total_count,
+                SUM(CASE WHEN e.withdraw_status = 'Pending' THEN 1 ELSE 0 END) AS pending_count,
+                SUM(CASE WHEN e.withdraw_status = 'Withdrawn' THEN 1 ELSE 0 END) AS withdrawn_count,
+                SUM(CASE WHEN e.withdraw_status = 'Rejected' THEN 1 ELSE 0 END) AS rejected_count
+            FROM `student_enrollments` e
+            WHERE e.withdraw_status IN ('Pending', 'Withdrawn', 'Rejected')
+        ");
+        if ($wRow = $stmtWStatsFallback->fetch(PDO::FETCH_ASSOC)) {
+            $withdrawStats['total']     = (int)($wRow['total_count'] ?? 0);
+            $withdrawStats['pending']   = (int)($wRow['pending_count'] ?? 0);
+            $withdrawStats['withdrawn'] = (int)($wRow['withdrawn_count'] ?? 0);
+            $withdrawStats['rejected']  = (int)($wRow['rejected_count'] ?? 0);
+        }
+    } catch (PDOException $ex2) {}
 }
 
 // 8. Fetch Filtered Enrollments List
@@ -912,7 +1007,7 @@ $sqlEnroll = "
             OR CAST(e.student_id AS CHAR) COLLATE utf8mb4_unicode_ci = s.student_id COLLATE utf8mb4_unicode_ci)
     " . ($hasCourseTables ? "LEFT JOIN `student_enrollment_courses` ec ON ec.enrollment_id = e.id" : "") . "
     WHERE (e.cancellation_reason IS NULL OR e.cancellation_reason != 'Cancelled by student')
-      AND e.enroll_requested_at IS NOT NULL
+      {$enrollWhereClause}
       AND e.status IN ('Pending', 'Enrolled', 'Cancelled')
       AND (e.status != 'Cancelled' OR active_enr.id IS NULL)
 ";
@@ -941,9 +1036,51 @@ if (!empty($searchQuery)) {
 }
 
 $sqlEnroll .= " GROUP BY e.id ORDER BY e.id DESC";
-$stmtEnroll = $dbConn->prepare($sqlEnroll);
-$stmtEnroll->execute($paramsEnroll);
-$enrollments = $stmtEnroll->fetchAll(PDO::FETCH_ASSOC);
+
+$enrollments = [];
+try {
+    $stmtEnroll = $dbConn->prepare($sqlEnroll);
+    $stmtEnroll->execute($paramsEnroll);
+    $enrollments = $stmtEnroll->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log("Enrollment query error: " . $e->getMessage());
+    try {
+        $fallbackEnroll = "
+            SELECT 
+                e.*, 
+                COALESCE(s.full_name, CONCAT('Student #', e.student_id)) AS student_name, 
+                COALESCE(s.student_id, CAST(e.student_id AS CHAR)) AS student_code, 
+                s.email AS student_email,
+                s.profile_image AS student_avatar
+                " . ($hasCourseTables ? ", GROUP_CONCAT(DISTINCT ec.course_code ORDER BY ec.course_code ASC SEPARATOR ', ') AS enrolled_courses" : "") . "
+            FROM `student_enrollments` e 
+            LEFT JOIN `students` s ON (e.student_id = s.id OR CAST(e.student_id AS CHAR) = s.student_id)
+            " . ($hasCourseTables ? "LEFT JOIN `student_enrollment_courses` ec ON ec.enrollment_id = e.id" : "") . "
+            WHERE (e.cancellation_reason IS NULL OR e.cancellation_reason != 'Cancelled by student')
+              AND e.status IN ('Pending', 'Enrolled', 'Cancelled')
+        ";
+        $fbParams = [];
+        if ($statusFilter !== 'All') {
+            $fallbackEnroll .= " AND e.status = ?";
+            $fbParams[] = $statusFilter;
+        }
+        if (!empty($searchQuery)) {
+            $fallbackEnroll .= " AND (s.full_name LIKE ? OR s.student_id LIKE ? OR e.batch LIKE ? OR e.transaction_id LIKE ?)";
+            $fbTerm = '%' . $searchQuery . '%';
+            $fbParams[] = $fbTerm;
+            $fbParams[] = $fbTerm;
+            $fbParams[] = $fbTerm;
+            $fbParams[] = $fbTerm;
+        }
+        $fallbackEnroll .= " GROUP BY e.id ORDER BY e.id DESC";
+        $stmtFb = $dbConn->prepare($fallbackEnroll);
+        $stmtFb->execute($fbParams);
+        $enrollments = $stmtFb->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $ex2) {
+        error_log("Fallback enrollment query error: " . $ex2->getMessage());
+        $enrollments = [];
+    }
+}
 
 // 9. Fetch Filtered Withdrawals List
 $withdrawStatusFilter = $_GET['withdraw_status'] ?? 'All';
@@ -969,7 +1106,7 @@ $sqlWithdraw = "
             OR CAST(e.student_id AS CHAR) COLLATE utf8mb4_unicode_ci = s.student_id COLLATE utf8mb4_unicode_ci)
     " . ($hasCourseTables ? "LEFT JOIN `student_withdrawal_courses` wc ON wc.enrollment_id = e.id" : "") . "
     WHERE e.withdraw_status IN ('Pending', 'Withdrawn', 'Rejected')
-      AND e.withdraw_requested_at IS NOT NULL
+      {$withdrawWhereClause}
       AND (e.withdraw_status != 'Rejected' OR active_w.id IS NULL)
 ";
 
@@ -994,10 +1131,51 @@ if (!empty($withdrawSearchQuery)) {
     $paramsWithdraw[] = $wTerm;
 }
 
-$sqlWithdraw .= " GROUP BY e.id ORDER BY COALESCE(e.withdraw_requested_at, e.updated_at, e.created_at) DESC, e.id DESC";
-$stmtWithdraw = $dbConn->prepare($sqlWithdraw);
-$stmtWithdraw->execute($paramsWithdraw);
-$withdrawals = $stmtWithdraw->fetchAll(PDO::FETCH_ASSOC);
+$sqlWithdraw .= " GROUP BY e.id {$withdrawOrderBy}";
+
+$withdrawals = [];
+try {
+    $stmtWithdraw = $dbConn->prepare($sqlWithdraw);
+    $stmtWithdraw->execute($paramsWithdraw);
+    $withdrawals = $stmtWithdraw->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log("Withdrawal query error: " . $e->getMessage());
+    try {
+        $fallbackWithdraw = "
+            SELECT 
+                e.*, 
+                COALESCE(s.full_name, CONCAT('Student #', e.student_id)) AS student_name, 
+                COALESCE(s.student_id, CAST(e.student_id AS CHAR)) AS student_code, 
+                s.email AS student_email,
+                s.profile_image AS student_avatar
+                " . ($hasCourseTables ? ", GROUP_CONCAT(DISTINCT wc.course_code ORDER BY wc.course_code ASC SEPARATOR ', ') AS withdrawal_courses" : "") . "
+            FROM `student_enrollments` e 
+            LEFT JOIN `students` s ON (e.student_id = s.id OR CAST(e.student_id AS CHAR) = s.student_id)
+            " . ($hasCourseTables ? "LEFT JOIN `student_withdrawal_courses` wc ON wc.enrollment_id = e.id" : "") . "
+            WHERE e.withdraw_status IN ('Pending', 'Withdrawn', 'Rejected')
+        ";
+        $fbWParams = [];
+        if ($withdrawStatusFilter !== 'All') {
+            $fallbackWithdraw .= " AND e.withdraw_status = ?";
+            $fbWParams[] = $withdrawStatusFilter;
+        }
+        if (!empty($withdrawSearchQuery)) {
+            $fallbackWithdraw .= " AND (s.full_name LIKE ? OR s.student_id LIKE ? OR e.batch LIKE ? OR e.withdraw_reason LIKE ?)";
+            $fbWTerm = '%' . $withdrawSearchQuery . '%';
+            $fbWParams[] = $fbWTerm;
+            $fbWParams[] = $fbWTerm;
+            $fbWParams[] = $fbWTerm;
+            $fbWParams[] = $fbWTerm;
+        }
+        $fallbackWithdraw .= " GROUP BY e.id ORDER BY e.id DESC";
+        $stmtWfb = $dbConn->prepare($fallbackWithdraw);
+        $stmtWfb->execute($fbWParams);
+        $withdrawals = $stmtWfb->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $ex2) {
+        error_log("Fallback withdrawal query error: " . $ex2->getMessage());
+        $withdrawals = [];
+    }
+}
 
 ?>
 
@@ -1314,7 +1492,7 @@ $withdrawals = $stmtWithdraw->fetchAll(PDO::FETCH_ASSOC);
                                                     </span>
                                                     <?php if (!empty($row['cancellation_reason'])): ?>
                                                         <div style="font-size: 0.72rem; color: #dc2626; margin-top: 2px;" title="<?php echo htmlspecialchars($row['cancellation_reason']); ?>">
-                                                            <em><?php echo htmlspecialchars(mb_strimwidth($row['cancellation_reason'], 0, 26, '...')); ?></em>
+                                                            <em><?php echo htmlspecialchars(safe_strimwidth($row['cancellation_reason'], 0, 26, '...')); ?></em>
                                                         </div>
                                                     <?php endif; ?>
                                                 </div>
